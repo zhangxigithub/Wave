@@ -8,37 +8,65 @@
 
 import UIKit
 
+public enum WaveDirection
+{
+    case Left
+    case Stop
+    case Right
+}
+
 public class Wave : UIView
 {
-    public var fps:Double         = 30        { didSet{ setupFPS() } }
-    public var waveWidth:CGFloat  = 100.0     { didSet{ setupWave() } }
-    public var waveHeight:CGFloat = 30.0      { didSet{ setupWave() } }
-    public var variance:Int       = 50        { didSet{ variances.removeAll(); setupWave() } }
+    public var fps:Double         = 30        { didSet{ setup(true) } }
+    public var waveWidth:CGFloat  = 100.0     { didSet{ setup() } }
+    public var waveHeight:CGFloat = 30.0      { didSet{ setup() } }
+    public var variance:Int       = 50        { didSet{ setup(true) } }
     public var stokeColor:UIColor = UIColor(red: 190.0/255.0, green: 192.0/255.0, blue: 228.0/255.0, alpha: 1)
     public var fillColor:UIColor  = UIColor(red: 106.0/255.0, green: 175.0/255.0, blue: 230.0/255.0, alpha: 1)
-    
 
-    private var timer:NSTimer?
+    public var direction:WaveDirection = .Right
+        {
+        didSet{
+            switch direction {
+            case .Left:
+                start()
+            case .Stop:
+                timer.invalidate()
+            case .Right:
+                start()
+            }
+        }
+    }
+
+    private var timer:NSTimer!
     private var variances = [CGFloat]()
-    private var left:CGFloat = 0
+    private var step:CGFloat = 0
 
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup(true)
+    }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setupFPS()
-
+        setup(true)
     }
     
-
-    func setupFPS()
+    func start()
     {
         timer?.invalidate()
         timer  = NSTimer.scheduledTimerWithTimeInterval(1.0/fps, target: self, selector: #selector(self.f), userInfo: nil, repeats: true)
-        setupWave()
     }
-    func setupWave()
+    
+    func setup(restartTimer:Bool = false)
     {
-        let count = Int(self.frame.size.width / waveWidth) + 2
+        if restartTimer
+        {
+            variances.removeAll()
+            start()
+        }
+        
+        let count = Int(self.frame.size.width / waveWidth) + 3
         for _ in 0 ..< count
         {
             variances.append(CGFloat(arc4random_uniform(UInt32(variance))))
@@ -58,15 +86,18 @@ public class Wave : UIView
         stokeColor.setStroke()
         fillColor.setFill()
         
+        //left-top
+        let LT = CGPointMake(step-waveWidth, self.frame.size.height/2)
+        //right-bottom
+        let RB = CGPointMake(step + waveWidth*CGFloat(variances.count), self.frame.size.height)
+        
         
         CGContextBeginPath(context);
-        CGContextMoveToPoint(context,left-waveWidth,self.frame.size.height/2);
-        
-        
+        CGContextMoveToPoint(context,LT.x,LT.y);
         
         for (x,height) in variances.enumerate()
         {
-            let p = CGPointMake(left+waveWidth*CGFloat(x), self.frame.size.height/2)
+            let p = CGPointMake(step + waveWidth*CGFloat(x), self.frame.size.height/2)
             var cp1 = p
             cp1.x  -= (3.0/4.0)*waveWidth
             cp1.y  += (waveHeight + CGFloat(variance/2) - height)
@@ -77,16 +108,33 @@ public class Wave : UIView
             CGContextAddCurveToPoint(context, cp1.x, cp1.y, cp2.x, cp2.y, p.x, p.y);
         }
         
-        CGContextAddLineToPoint(context, left + self.frame.size.width , self.frame.size.height);
-        CGContextAddLineToPoint(context, left - waveWidth             , self.frame.size.height);
-        CGContextAddLineToPoint(context, left - waveWidth             , self.frame.size.height/2);
+        CGContextAddLineToPoint(context, RB.x, RB.y);
+        CGContextAddLineToPoint(context, LT.x, RB.y);
+        CGContextAddLineToPoint(context, LT.x, LT.y);
         
-        left += 1
+        switch direction {
+        case .Left:
+            step -= 1
+        case .Stop:
+            break
+        case .Right:
+            step += 1
+        }
         
-        if left >= waveWidth
+        if abs(step) >= waveWidth
         {
-            left = 0
-            variances.insert(CGFloat(arc4random_uniform(UInt32(variance))), atIndex: 0)
+            switch direction {
+            case .Left:
+                step = 0
+                variances.append(CGFloat(arc4random_uniform(UInt32(variance))))
+                variances.removeFirst()
+            case .Stop:
+                break
+            case .Right:
+                step = 0
+                variances.insert(CGFloat(arc4random_uniform(UInt32(variance))), atIndex: 0)
+                variances.removeLast()
+            }
         }
     
         CGContextDrawPath(context,.FillStroke)

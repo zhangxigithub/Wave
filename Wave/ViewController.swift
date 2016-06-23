@@ -14,6 +14,22 @@ class ViewController: UIViewController {
     @IBOutlet weak var wave: Wave!
     
     
+    var lastDirection = WaveDirection.Right
+ 
+    
+    @IBAction func directionChanged(sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            wave.direction = .Left
+        case 1:
+            wave.direction = .Stop
+        case 2:
+            wave.direction = .Right
+        default:
+            break;
+        }
+    }
+    
     @IBAction func change(sender: UISlider) {
         
         switch sender.tag

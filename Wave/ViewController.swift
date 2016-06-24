@@ -14,11 +14,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var wave: Wave!
     
     
-    var lastDirection = WaveDirection.Right
- 
-    
     @IBAction func directionChanged(sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
+        switch sender.selectedSegmentIndex
+        {
         case 0:
             wave.direction = .Left
         case 1:
@@ -48,7 +46,5 @@ class ViewController: UIViewController {
 
     }
     
-    
-
 }
 

@@ -17,23 +17,21 @@ public enum WaveDirection
 
 public class Wave : UIView
 {
-    public var fps:Double         = 30        { didSet{ setup(true) } }
-    public var waveWidth:CGFloat  = 100.0     { didSet{ setup() } }
-    public var waveHeight:CGFloat = 30.0      { didSet{ setup() } }
-    public var variance:Int       = 50        { didSet{ setup(true) } }
-    public var stokeColor:UIColor = UIColor(red: 190.0/255.0, green: 192.0/255.0, blue: 228.0/255.0, alpha: 1)
-    public var fillColor:UIColor  = UIColor(red: 106.0/255.0, green: 175.0/255.0, blue: 230.0/255.0, alpha: 1)
+    public var fps:        Double  = 30        { didSet{ setup(true) } }
+    public var waveWidth:  CGFloat = 100.0     { didSet{ setup()     } }
+    public var waveHeight: CGFloat = 30.0      { didSet{ setup()     } }
+    public var variance:   Int     = 50        { didSet{ setup(true) } }
+    public var stokeColor: UIColor = UIColor(red: 190.0/255.0, green: 192.0/255.0, blue: 228.0/255.0, alpha: 1)
+    public var fillColor:  UIColor = UIColor(red: 106.0/255.0, green: 175.0/255.0, blue: 230.0/255.0, alpha: 1)
 
     public var direction:WaveDirection = .Right
         {
         didSet{
-            switch direction {
-            case .Left:
-                start()
-            case .Stop:
-                timer.invalidate()
-            case .Right:
-                start()
+            switch direction
+            {
+            case .Left:  start()
+            case .Stop:  timer.invalidate()
+            case .Right: start()
             }
         }
     }
@@ -91,19 +89,14 @@ public class Wave : UIView
         //right-bottom
         let RB = CGPointMake(step + waveWidth*CGFloat(variances.count), self.frame.size.height)
         
-        
         CGContextBeginPath(context);
         CGContextMoveToPoint(context,LT.x,LT.y);
         
         for (x,height) in variances.enumerate()
         {
             let p = CGPointMake(step + waveWidth*CGFloat(x), self.frame.size.height/2)
-            var cp1 = p
-            cp1.x  -= (3.0/4.0)*waveWidth
-            cp1.y  += (waveHeight + CGFloat(variance/2) - height)
-            var cp2 = p
-            cp2.x  -= waveWidth/4.0
-            cp2.y  -= (waveHeight + CGFloat(variance/2) - height)
+            let cp1 = CGPointMake(p.x - (3.0/4.0)*waveWidth ,p.y + (waveHeight + CGFloat(variance/2) - height))
+            let cp2 = CGPointMake(p.x - (1.0/4.0)*waveWidth, p.y - (waveHeight + CGFloat(variance/2) - height))
             
             CGContextAddCurveToPoint(context, cp1.x, cp1.y, cp2.x, cp2.y, p.x, p.y);
         }
@@ -113,12 +106,9 @@ public class Wave : UIView
         CGContextAddLineToPoint(context, LT.x, LT.y);
         
         switch direction {
-        case .Left:
-            step -= 1
-        case .Stop:
-            break
-        case .Right:
-            step += 1
+        case .Left:  step -= 1
+        case .Stop:  break
+        case .Right: step += 1
         }
         
         if abs(step) >= waveWidth
@@ -128,15 +118,12 @@ public class Wave : UIView
                 step = 0
                 variances.append(CGFloat(arc4random_uniform(UInt32(variance))))
                 variances.removeFirst()
-            case .Stop:
-                break
-            case .Right:
+            case .Right, .Stop:
                 step = 0
                 variances.insert(CGFloat(arc4random_uniform(UInt32(variance))), atIndex: 0)
                 variances.removeLast()
             }
         }
-    
         CGContextDrawPath(context,.FillStroke)
     }
 }

@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
 
 
-  s.name         = "Wave"
-  s.version      = "0.1.1"
+  s.name         = "ZXWave"
+  s.version      = "0.1.2"
   s.summary      = "Wave"
 
 

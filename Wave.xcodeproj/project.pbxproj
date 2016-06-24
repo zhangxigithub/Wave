@@ -12,7 +12,6 @@
 		33E981B31D1BF28D0045A110 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33E981B11D1BF28D0045A110 /* Main.storyboard */; };
 		33E981B81D1BF28D0045A110 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33E981B61D1BF28D0045A110 /* LaunchScreen.storyboard */; };
 		33ED709B1D1CD615000F8039 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33ED709A1D1CD615000F8039 /* Wave.swift */; };
-		33ED709D1D1CD6B1000F8039 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33ED709C1D1CD6B1000F8039 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +22,6 @@
 		33E981B71D1BF28D0045A110 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33E981B91D1BF28D0045A110 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33ED709A1D1CD615000F8039 /* Wave.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = SOURCE_ROOT; };
-		33ED709C1D1CD6B1000F8039 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,7 +29,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33ED709D1D1CD6B1000F8039 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,7 +38,6 @@
 		33E981A11D1BF28D0045A110 = {
 			isa = PBXGroup;
 			children = (
-				33ED709C1D1CD6B1000F8039 /* QuartzCore.framework */,
 				33E981AC1D1BF28D0045A110 /* Wave */,
 				33E981AB1D1BF28D0045A110 /* Products */,
 			);

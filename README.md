@@ -14,6 +14,7 @@ wave.direction = .Left
 
 wave.waveHeight = 50
 wave.waveWidth  = 100
+wave.waveTop    = 0.5
 wave.variance   = 50
 wave.fps        = 30
 

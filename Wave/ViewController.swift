@@ -14,21 +14,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var wave: Wave!
     
     
-    @IBAction func directionChanged(sender: UISegmentedControl) {
+    @IBAction func directionChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex
         {
         case 0:
-            wave.direction = .Left
+            wave.direction = .left
         case 1:
-            wave.direction = .Stop
+            wave.direction = .stop
         case 2:
-            wave.direction = .Right
+            wave.direction = .right
         default:
             break;
         }
     }
     
-    @IBAction func change(sender: UISlider) {
+    @IBAction func change(_ sender: UISlider) {
         
         switch sender.tag
         {
@@ -37,8 +37,10 @@ class ViewController: UIViewController {
         case 2:
             wave.waveWidth  = CGFloat(sender.value)
         case 3:
-            wave.variance   = Int(sender.value)
+            wave.waveTop    = CGFloat(sender.value)
         case 4:
+            wave.variance   = Int(sender.value)
+        case 5:
             wave.fps        = Double(sender.value)
         default:
             break
